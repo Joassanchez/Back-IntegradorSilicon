@@ -10,18 +10,12 @@ app.post('/login', login);
 
 
 function login(req, res) {
-    const { nickname, password } = req.body; //ES6
+    const { nickname, password } = req.body; 
 
     usuarioDb.findByNickname(nickname, (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
-
-            // hasta aca sabemos que el usuario con ese "nickname" existe en la DB,
-            // ahora debemos verificar si su clave es correcta, para ello debemos desencriptarla
-
-            //const iguales = bcrypt.compareSync("texto plano", "texto encriptado");
-
             const iguales = bcrypt.compareSync(password, result.detail.password);
             if (iguales) {
                 let user = {
@@ -29,8 +23,6 @@ function login(req, res) {
                     mail: result.detail.email
                     
                 }
-                //JSON WEB TOKEN
-                // devolvemos un json en forma de token (que basicamente es un string cifrado)
 
                 jwt.sign(user, 'siliconSectret', { expiresIn: '600s' }, (err, token) => {
                     if (err) {
