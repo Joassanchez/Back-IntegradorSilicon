@@ -3,13 +3,16 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
- 
-var usuarioDb = require('../../model/ADMINISTRADOR/Usuario.js');
 
-app.get('/', getAll);
-app.post('/', createUser);
-app.put('/:id_usuario', updateUser);
-app.delete('/:id_usuario', deleteUser);
+var usuarioDb = require('model/ADMINISTRADOR/Usuario.js');
+
+const securityController = require("controller/SecurityController.js");
+
+app.get('/', securityController.verificarToken, getAll);
+app.post('/',securityController.verificarToken, createUser);
+app.put('/:id_usuario',securityController.verificarToken, updateUser);
+app.delete('/:id_usuario',securityController.verificarToken, deleteUser);
+
 
 function getAll(req, res) {
     usuarioDb.getAll((err, resultado) => {
