@@ -1,6 +1,7 @@
 require('rootpath')();
 const mysql = require('mysql');
 const configuracion = require('config.json'); 
+const bcrypt = require('bcrypt');
 
 var connection = mysql.createConnection(configuracion.database);
 
@@ -26,13 +27,16 @@ usuario_db.getAll = (funCallback) => {
 }//LISTAR
 
 usuario_db.create = function (usuario, funcallback) {
+
     const { nickname, password, email, id_rol } = usuario; 
     if (!nickname || !password || !email || !id_rol) { 
         return funcallback({ error: 'Faltan campos obligatorios' }); 
     }
 
+    let claveCifrada = bcrypt.hashSync(usuario.password, 10);
+
     const query = 'INSERT INTO Usuario (nickname, password, email, id_rol) VALUES (?, ?, ?, ?)';
-    const datos_persona = [nickname, password, email, id_rol]; 
+    const datos_persona = [nickname, claveCifrada, email, id_rol]; 
 
     connection.query(query, datos_persona, function (err, result) {
         if (err) {
@@ -110,5 +114,29 @@ usuario_db.borrar = function (id_usuario, retorno) {
         }
     });
 };//DELETE
+
+
+usuario_db.findByNickname = function (nickname, funCallback) {
+    var consulta = 'SELECT * FROM usuario WHERE nickname = ?';
+    connection.query(consulta, nickname, function (err, result) {
+        if (err) {
+            funCallback(err);
+            return;
+        } else {
+
+            if (result.length > 0) {
+                funCallback(undefined, {
+                    message: `Usuario encontrado`,
+                    detail: result[0]
+                });
+            } else {
+                funCallback({
+                    message: "No existe un usuario que coincida con el criterio de busqueda",
+                    detail: result
+                });
+            }
+        }
+    });
+}
 
 module.exports = usuario_db;
