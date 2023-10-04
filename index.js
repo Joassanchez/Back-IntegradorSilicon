@@ -13,11 +13,12 @@ morgan(':method :url :status :res[content-length] - :response-time ms');
 const controladorUsuario = require('./controller/ADMINISTRADOR/UsuarioController.js');
 const controladorProveedor = require('./controller/ADMINISTRADOR/ProveedorController.js'); 
 const controladorVenta = require('./controller/EMPLEADO/VentaController.js');
+const controladorDetalleVenta = require('./controller/EMPLEADO/DetalleVentaController.js');
 
 app.use('/api/usuario', controladorUsuario);
 app.use('/api/proveedor', controladorProveedor); 
 app.use('/api/venta', controladorVenta );
-
+app.use('/api/venta/Detalle_Venta', controladorDetalleVenta );
 
 app.listen(configuracion.server.port, (err) => {
     if (err) {

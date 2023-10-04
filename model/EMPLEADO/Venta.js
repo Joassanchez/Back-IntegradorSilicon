@@ -16,7 +16,7 @@ var Venta_db = {};
 
 Venta_db.getAll = (funCallback) => {
 
-    var consulta = 'SELECT V.nro_venta , V.fecha, V.hora, M.NombrePago AS "Metodo de Pago", U.nickname AS "EMPLEADO" FROM VENTA V INNER JOIN Metodo_Pago M INNER JOIN usuario U WHERE V.id_metodo = M.id_metodo AND V.id_usuario = U.id_usuario order by nro_venta asc;';
+    var consulta = 'SELECT V.nro_venta, V.fecha, V.hora, M.NombrePago AS "Metodo de Pago",SUM(DV.CantVenta * P.precio_venta) AS Monto_Total, U.nickname AS "EMPLEADO" FROM VENTA V INNER JOIN Metodo_Pago M ON V.id_metodo = M.id_metodo INNER JOIN usuario U ON V.id_usuario = U.id_usuario INNER JOIN detalle_venta DV ON V.nro_venta = DV.nro_venta INNER JOIN producto P ON DV.Id_producto = P.Id_producto GROUP BY V.nro_venta, V.fecha, V.hora, M.NombrePago, U.nickname ORDER BY V.nro_venta ASC;';
     connection.query(consulta, (err, rows) => {
         if (err) {
             funCallback(err);
