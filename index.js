@@ -18,18 +18,17 @@ const controladorUsuario = require('./controller/ADMINISTRADOR/UsuarioController
 const controladorProveedor = require('./controller/ADMINISTRADOR/ProveedorController.js'); 
 const controladorVenta = require('./controller/EMPLEADO/VentaController.js');
 const controladorDetalleVenta = require('./controller/EMPLEADO/DetalleVentaController.js');
-
-app.use('/api/usuario', controladorUsuario);
-app.use('/api/proveedor', controladorProveedor); 
-app.use('/api/venta', controladorVenta );
-app.use('/api/venta/Detalle_Venta', controladorDetalleVenta );
+const DetallePedidoController = require('./controller/ADMINISTRADOR/DetallePedidoController.js'); 
+const controladorPedido = require('./controller/ADMINISTRADOR/PedidoController.js'); 
 
 app.use('/usuario', controladorUsuario);
 app.use('/proveedor', controladorProveedor); 
 app.use('/venta', controladorVenta );
 app.use('/venta/Detalle_Venta', controladorDetalleVenta );
 app.use('/security', securityController.app);
- 
+app.use('/detalle_pedido', DetallePedidoController);
+app.use('/pedido', controladorPedido);
+
 app.listen(configuracion.server.port, (err) => {
     if (err) {
         console.error(err);

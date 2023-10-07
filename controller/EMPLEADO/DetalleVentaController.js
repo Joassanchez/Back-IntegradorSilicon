@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
  
-const DetalleVenta_db = require('../../model/EMPLEADO/DetalleVenta.js');
+const DetalleVenta_db = require('model/EMPLEADO/DetalleVenta.js');
 
 app.get('/', getAll);
 app.post('/', createDetalleVenta);
