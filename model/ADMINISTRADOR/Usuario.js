@@ -27,8 +27,8 @@ usuario_db.getAll = (funCallback) => {
 }//LISTAR
 
 usuario_db.create = function (usuario, funcallback) {
-
     const { nickname, password, email, id_rol } = usuario; 
+    
     if (!nickname || !password || !email || !id_rol) { 
         return funcallback({ error: 'Faltan campos obligatorios' }); 
     }
@@ -67,7 +67,7 @@ usuario_db.update = function (datos_usuario, id_usuario, funcallback) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'UPDATE Usuario SET nickname=?, password=?, email=? WHERE id_usuario=?';
+    const query = 'UPDATE usuario SET nickname=?, password=?, email=? WHERE id_usuario=?';
     const consulta = [nickname, password, email, id_usuario]; 
     connection.query(query, consulta, (err, result) => {
         if (err) {

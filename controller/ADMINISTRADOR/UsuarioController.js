@@ -8,7 +8,7 @@ var usuarioDb = require('model/ADMINISTRADOR/Usuario.js');
 
 const securityController = require("controller/SecurityController.js");
 
-app.get('/',getAll);
+app.get('/',securityController.verificarToken,getAll);
 app.post('/',securityController.verificarToken, createUser);
 app.put('/:id_usuario',securityController.verificarToken, updateUser);
 app.delete('/:id_usuario',securityController.verificarToken, deleteUser);
@@ -26,6 +26,7 @@ function getAll(req, res) {
 
 function createUser(req, res) {
     let usuario = req.body;
+    console.log("Datos del usuario recibidos en el servidor:", usuario); 
     usuarioDb.create(usuario, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
@@ -34,6 +35,7 @@ function createUser(req, res) {
         }
     });
 }
+
 
 function updateUser(req, res) {
     let datos_usuario = req.body;
