@@ -17,6 +17,7 @@ var DetalleVenta_db = {};
 DetalleVenta_db.getAll = (funCallback) => {
 
     var consulta = 'SELECT dv.nro_venta, dv.id_detalle_venta, dv.CantVenta, p.NombreProducto, p.precio_venta, p.unidad_medida, (dv.CantVenta * p.precio_venta) AS Monto_Parcial FROM DETALLE_VENTA dv JOIN PRODUCTO p ON dv.Id_producto = p.Id_producto;';
+    
     connection.query(consulta, (err, rows) => {
         if (err) {
             funCallback(err);
