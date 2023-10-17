@@ -14,7 +14,7 @@ connection.connect((err) => {
 var Pedido_db = {};
 
 Pedido_db.getAll = (funCallback) => {
-    var consulta = 'SELECT * FROM PEDIDO';
+    var consulta = 'SELECT p.nro_pedido, p.estado, p.fecha, u.nickname, pro.NombreProducto FROM PEDIDO p INNER JOIN Usuario u ON p.id_usuario = u.id_usuario INNER JOIN PRODUCTO pro ON p.Id_producto = pro.Id_producto;';
     connection.query(consulta, (err, rows) => {
         if (err) {
             funCallback(err);
@@ -97,18 +97,41 @@ Pedido_db.update = function (datos_pedido, nro_pedido, funcallback) {
 
 
 Pedido_db.delete = function (nro_pedido, retorno) {
-    const consulta = "DELETE FROM PEDIDO WHERE nro_pedido = ?";
+    const consulta = "DELETE FROM  WHERE nro_pedido = ?";
     connection.query(consulta, nro_pedido, (err, result) => {
         if (err) {
             retorno({ menssage: err.code, detail: err }, undefined);
         } else {
             if (result.affectedRows == 0) {
                 retorno(undefined, { message: "No se encontró el pedido, ingrese otro número de pedido", detail: result });
-            } else {
+            } else {PEDIDO
                 retorno(undefined, { message: "Pedido eliminado", detail: result });
             }
         }
     });
 }
+Pedido_db.findByID = function (nro_pedido, funCallback) {
+    connection.query('SELECT * FROM PEDIDO WHERE nro_pedido = ?', nro_pedido, (err, result) => {
+        if (err) {
+            funCallback({
+                message: "a ocurrido algun error inesperado, revisar codigo de error",
+                detail: err
+            });
+        } else if (result.length == 0) {
+            funCallback(undefined, {
+                message: `no se encontro el pedido con el ID: ${nro_pedido}`,
+                detail: result
+            });
+        } else {
+
+            funCallback(undefined, {
+                message: `Pedido hallado con exito`,
+                detail: result[0]
+            });
+        }
+    });
+
+}
+
 
 module.exports = Pedido_db;

@@ -6,6 +6,7 @@ app.use(express.urlencoded({ extended: true }));
 const Pedido_db = require('model/ADMINISTRADOR/Pedido.js');
 
 app.get('/', getAllPedidos);
+app.get('/:nro_pedido',findByID);
 app.post('/', createPedido);
 app.put('/:nro_pedido', updatePedido);
 app.delete('/:nro_pedido', deletePedido);
@@ -16,6 +17,15 @@ function getAllPedidos(req, res) {
             res.status(500).send(err);
         } else {
             res.json(resultado);
+        }
+    });
+}
+function findByID(req, res) {
+    usuarioDb.findByID(req.params.nro_pedido, (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.send(result);
         }
     });
 }
