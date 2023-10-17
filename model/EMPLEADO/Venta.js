@@ -14,9 +14,22 @@ connection.connect((err) => {
 
 var Venta_db = {};
 
+Venta_db.getMetodo_Pago = (funCallback) => {
+
+    var consulta = 'SELECT * FROM Metodo_Pago';
+
+    connection.query(consulta, (err, rows) => {
+        if (err) {
+            funCallback(err);
+        } else {
+            funCallback(undefined, rows); 
+        }
+    });
+}
+
 Venta_db.getAll = (funCallback) => {
 
-    var consulta = 'SELECT V.nro_venta, V.fecha, V.hora, M.NombrePago AS "Metodo de Pago",SUM(DV.CantVenta * P.precio_venta) AS Monto_Total, U.nickname AS "EMPLEADO" FROM VENTA V INNER JOIN Metodo_Pago M ON V.id_metodo = M.id_metodo INNER JOIN usuario U ON V.id_usuario = U.id_usuario INNER JOIN detalle_venta DV ON V.nro_venta = DV.nro_venta INNER JOIN producto P ON DV.Id_producto = P.Id_producto GROUP BY V.nro_venta, V.fecha, V.hora, M.NombrePago, U.nickname ORDER BY V.nro_venta ASC;';
+    var consulta = 'SELECT V.nro_venta, V.fecha, V.hora, M.NombrePago,SUM(DV.CantVenta * P.precio_venta) AS Monto_Total, U.nickname AS "Persona" FROM VENTA V INNER JOIN Metodo_Pago M ON V.id_metodo = M.id_metodo INNER JOIN usuario U ON V.id_usuario = U.id_usuario INNER JOIN detalle_venta DV ON V.nro_venta = DV.nro_venta INNER JOIN producto P ON DV.Id_producto = P.Id_producto GROUP BY V.nro_venta, V.fecha, V.hora, M.NombrePago, U.nickname ORDER BY V.nro_venta ASC;';
     connection.query(consulta, (err, rows) => {
         if (err) {
             funCallback(err);
@@ -59,14 +72,14 @@ Venta_db.create = function (venta, funcallback) {
 };//CREATE
 
 Venta_db.update = function (datos_venta, nro_venta, funcallback) {
-    const { fecha, hora, id_metodo } = datos_venta;
+    const { id_metodo } = datos_venta;
 
-    if (!fecha || !hora || !id_metodo) {
+    if ( !id_metodo) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'UPDATE VENTA SET fecha=?, hora=?, id_metodo=? WHERE nro_venta=?';
-    const consulta = [fecha, hora, id_metodo, nro_venta]; 
+    const query = 'UPDATE VENTA SET id_metodo=? WHERE nro_venta=?';
+    const consulta = [id_metodo, nro_venta]; 
 
     connection.query(query, consulta, (err, result) => {
         if (err) {

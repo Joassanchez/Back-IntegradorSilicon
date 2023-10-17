@@ -9,7 +9,7 @@ var usuarioDb = require('model/ADMINISTRADOR/Usuario.js');
 const securityController = require("controller/SecurityController.js");
 
 app.get('/',getAll);
-app.post('/',securityController.verificarToken, createUser);
+app.post('/', createUser);
 app.put('/:id_usuario',securityController.verificarToken, updateUser);
 app.delete('/:id_usuario',securityController.verificarToken, deleteUser);
 

@@ -23,8 +23,8 @@ const controladorPedido = require('./controller/ADMINISTRADOR/PedidoController.j
 
 app.use('/usuario', controladorUsuario);
 app.use('/proveedor', controladorProveedor); 
-app.use('/venta', controladorVenta );
-app.use('/venta/Detalle_Venta', controladorDetalleVenta );
+app.use('/Registros', controladorVenta );
+app.use('/Registros/Detalles', controladorDetalleVenta );
 app.use('/security', securityController.app);
 app.use('/detalle_pedido', DetallePedidoController);
 app.use('/pedido', controladorPedido);

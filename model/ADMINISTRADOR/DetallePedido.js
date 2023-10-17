@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const configuracion = require('./config.json'); // Asegúrate de tener la ruta correcta
+const configuracion = require('config.json'); // Asegúrate de tener la ruta correcta
 
 var connection = mysql.createConnection(configuracion.database);
 

@@ -7,9 +7,20 @@ app.use(express.urlencoded({ extended: true }));
 const Venta_db = require('../../model/EMPLEADO/Venta.js');
 
 app.get('/', getAll);
+app.get('/Metodo_Pago', getMetodo_Pago);
 app.post('/', createVenta);
 app.put('/:nro_venta', updateVenta);
 app.delete('/:nro_venta', deleteVenta);
+
+function getMetodo_Pago(req, res) {
+    Venta_db.getMetodo_Pago((err, resultado) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(resultado);
+        }
+    });
+}
 
 function getAll(req, res) {
     Venta_db.getAll((err, resultado) => {
@@ -35,6 +46,7 @@ function createVenta(req, res) {
 function updateVenta(req, res) {
     let datos_venta = req.body;
     let nro_venta = req.params.nro_venta; 
+    
     Venta_db.update(datos_venta, nro_venta, (err, resultado) => { 
         if (err) {
             res.status(500).send(err);

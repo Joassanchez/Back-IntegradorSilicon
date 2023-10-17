@@ -14,6 +14,19 @@ connection.connect((err) => {
 
 var DetalleVenta_db = {};
 
+DetalleVenta_db.getProductos = (funCallback) => {
+
+    var consulta = 'SELECT * FROM PRODUCTO';
+    
+    connection.query(consulta, (err, rows) => {
+        if (err) {
+            funCallback(err);
+        } else {
+            funCallback(undefined, rows); 
+        }
+    });
+}//LISTAR
+
 DetalleVenta_db.getAll = (funCallback) => {
 
     var consulta = 'SELECT dv.nro_venta, dv.id_detalle_venta, dv.CantVenta, p.NombreProducto, p.precio_venta, p.unidad_medida, (dv.CantVenta * p.precio_venta) AS Monto_Parcial FROM DETALLE_VENTA dv JOIN PRODUCTO p ON dv.Id_producto = p.Id_producto;';
@@ -108,9 +121,13 @@ DetalleVenta_db.borrar = function (eliminar, retorno) {
         } else {
 
             if (result.affectedRows == 0) {
-                retorno(undefined, { message: "no se encontro el DETALLE a eliminar, ingrese otro id", detail: result });
+                retorno(undefined, { 
+                    message: `no se encontro el DETALLE a eliminar, ingrese otro id`, 
+                    detail: result });
             } else {
-                retorno(undefined, { message: "DETALLE eliminado", detail: result });
+                retorno(undefined,  {
+                    message: `"DETALLE ELIMINADO"`, 
+                    detail: result });
             }
         }
     });

@@ -7,9 +7,21 @@ app.use(express.urlencoded({ extended: true }));
 const DetalleVenta_db = require('model/EMPLEADO/DetalleVenta.js');
 
 app.get('/', getAll);
+app.get('/Productos', getProductos);
 app.post('/', createDetalleVenta);
 app.put('/:id_detalle_venta', updateDetalleVenta);
 app.delete('/:id_detalle_venta', deleteDetalleVenta);
+
+
+function getProductos(req, res) {
+    DetalleVenta_db.getProductos((err, resultado) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(resultado);
+        }
+    });
+}
 
 function getAll(req, res) {
     DetalleVenta_db.getAll((err, resultado) => {
