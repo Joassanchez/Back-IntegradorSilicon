@@ -38,7 +38,7 @@ proveedor_db.create = (proveedor, funcallback) => {
             funcallback(err);
         } else {
             funcallback(null, {
-                mensaje: "Proveedor creado con éxito",
+                message: "Proveedor creado con éxito",
                 detalle: result
             });
         }

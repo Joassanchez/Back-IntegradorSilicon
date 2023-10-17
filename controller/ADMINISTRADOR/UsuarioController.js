@@ -9,9 +9,10 @@ var usuarioDb = require('model/ADMINISTRADOR/Usuario.js');
 const securityController = require("controller/SecurityController.js");
 
 app.get('/',securityController.verificarToken,getAll);
-app.post('/',securityController.verificarToken, createUser);
-app.put('/:id_usuario',securityController.verificarToken, updateUser);
-app.delete('/:id_usuario',securityController.verificarToken, deleteUser);
+app.get('/:id_usuario',findByID);
+app.post('/', createUser);
+app.put('/:id_usuario', updateUser);
+app.delete('/:id_usuario', deleteUser);
 
 
 function getAll(req, res) {
@@ -26,7 +27,6 @@ function getAll(req, res) {
 
 function createUser(req, res) {
     let usuario = req.body;
-    console.log("Datos del usuario recibidos en el servidor:", usuario); 
     usuarioDb.create(usuario, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
@@ -36,31 +36,44 @@ function createUser(req, res) {
     });
 }
 
-
-function updateUser(req, res) {
-    let datos_usuario = req.body;
-    let id_usuario = req.params.id_usuario; 
-    usuarioDb.update(datos_usuario, id_usuario, (err, resultado) => { 
+function findByID(req, res) {
+    usuarioDb.findByID(req.params.id_usuario, (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.send(resultado);
+            res.send(result);
         }
     });
 }
 
-function deleteUser(req, res) {
-    usuarioDb.borrar(req.params.id_usuario, (err, result_model) => {
+
+
+function updateUser(req, res) {
+    let datos_usuario = req.body; 
+    let id_usaurio = req.params.id_usuario 
+    usuarioDb.update(datos_usuario, id_usaurio, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            if (result_model.detail.affectedRows == 0) {
-                res.status(404).send(result_model.message);
+            res.send(resultado)
+        }
+    })
+}
+
+
+function deleteUser(req, res) {
+    usuarioDb.borrar(req.params.id_usuario, (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            if (result.detail.affectedRows == 0) {
+                res.status(404).send(result.message);
             } else {
-                res.send(result_model.message);
+                res.send(result);
             }
         }
     });
 }
+
 
 module.exports = app;

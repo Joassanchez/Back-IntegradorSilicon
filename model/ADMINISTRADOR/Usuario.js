@@ -1,6 +1,6 @@
 require('rootpath')();
 const mysql = require('mysql');
-const configuracion = require('config.json'); 
+const configuracion = require('config.json');
 const bcrypt = require('bcrypt');
 
 var connection = mysql.createConnection(configuracion.database);
@@ -21,57 +21,59 @@ usuario_db.getAll = (funCallback) => {
         if (err) {
             funCallback(err);
         } else {
-            funCallback(undefined, rows); 
+            funCallback(undefined, rows);
         }
     });
 }//LISTAR
 
 usuario_db.create = function (usuario, funcallback) {
-    const { nickname, password, email, id_rol } = usuario; 
-    
-    if (!nickname || !password || !email || !id_rol) { 
-        return funcallback({ error: 'Faltan campos obligatorios' }); 
+    const { nickname, password, email, id_rol } = usuario;
+
+    if (!nickname || !password || !email || !id_rol) {
+        return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
     let claveCifrada = bcrypt.hashSync(usuario.password, 10);
 
     const query = 'INSERT INTO Usuario (nickname, password, email, id_rol) VALUES (?, ?, ?, ?)';
-    const datos_persona = [nickname, claveCifrada, email, id_rol]; 
+    const datos_usuario = [nickname, claveCifrada, email, id_rol];
 
-    connection.query(query, datos_persona, function (err, result) {
+    connection.query(query, datos_usuario, function (err, result) {
         if (err) {
             if (err.code == "ER_DUP_ENTRY") {
                 funcallback({
-                    mensajito: "El usuario ya fue registrado",
+                    message: "El usuario ya fue registrado",
                     detalle: err
                 });
             } else {
                 funcallback({
-                    mensajito: "Error diferente",
+                    message: "Error diferente",
                     detalle: err
                 });
             }
         } else {
-            funcallback(null, {
-                mensajito: "Se creó el usuario " + usuario.nickname,
+            funcallback(undefined, {
+                message: "Se creó el usuario " + usuario.nickname,
                 detalle: result
             });
         }
     });
 };//CREATE
 
-usuario_db.update = function (datos_usuario, id_usuario, funcallback) {
-    const { nickname, password, email } = datos_usuario;
+usuario_db.update = function (usuario, id_usuario, funcallback) {
+    const { nickname, password, email, id_rol } = usuario;
 
     if (!nickname || !password || !email) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'UPDATE usuario SET nickname=?, password=?, email=? WHERE id_usuario=?';
-    const consulta = [nickname, password, email, id_usuario]; 
+    let claveCifrada = bcrypt.hashSync(usuario.password, 10);
+
+    const query = 'UPDATE usuario SET nickname=?, password=?, email=?, id_rol=? WHERE id_usuario=?';
+    const consulta = [nickname, claveCifrada, email,id_rol, id_usuario];
     connection.query(query, consulta, (err, result) => {
         if (err) {
-            if (err.code === "ER_TRUNCATED_WRONG_VALUE") { 
+            if (err.code === "ER_TRUNCATED_WRONG_VALUE") {
                 funcallback({
                     message: `El id de usuario es incorrecto`,
                     detail: err
@@ -83,37 +85,48 @@ usuario_db.update = function (datos_usuario, id_usuario, funcallback) {
                 });
             }
         } else {
-            if (result.affectedRows === 0) { 
+            if (result.affectedRows === 0) {
                 funcallback({
                     message: "No existe el usuario que coincida con el criterio de búsqueda",
                     detail: result
                 });
             } else {
                 funcallback(null, {
-                    message: `Se actualizaron los datos del Usuario con ID ${id_usuario}`, 
+                    message: `Se actualizaron los datos del Usuario con ID ${id_usuario}`,
                     detail: result
                 });
             }
         }
     });
-};//UPDATE
 
-usuario_db.borrar = function (id_usuario, retorno) {
+};//UPDATE
+usuario_db.borrar = function (id_usuario, funCallback) {
     consulta = "DELETE FROM USUARIO WHERE id_usuario = ?";
     connection.query(consulta, id_usuario, (err, result) => {
         if (err) {
-            retorno({ menssage: err.code, detail: err }, undefined);
+            funCallback({ 
+                message: err.code, 
+                detail: err 
+            });
 
         } else {
 
             if (result.affectedRows == 0) {
-                retorno(undefined, { message: "no se encontro el usaurio, ingrese otro id", detail: result });
+                funCallback(undefined, {
+                    message: 'No se encontró el usuario, ingrese otro ID',
+                    detail: result
+                });
             } else {
-                retorno(undefined, { message: "usuario eliminado", detail: result });
+                funCallback(undefined, {
+                    message: 'Usuario eliminado con exito',
+                    detail: result
+                });
             }
+            
         }
     });
-};//DELETE
+}
+
 
 
 usuario_db.findByNickname = function (nickname, funCallback) {
@@ -137,6 +150,29 @@ usuario_db.findByNickname = function (nickname, funCallback) {
             }
         }
     });
+}
+
+usuario_db.findByID = function (id_usuario, funCallback) {
+    connection.query('SELECT * FROM usuario WHERE id_usuario = ?', id_usuario, (err, result) => {
+        if (err) {
+            funCallback({
+                message: "a ocurrido algun error inesperado, revisar codigo de error",
+                detail: err
+            });
+        } else if (result.length == 0) {
+            funCallback(undefined, {
+                message: `no se encontro un usuario con el ID: ${id_usuario}`,
+                detail: result
+            });
+        } else {
+
+            funCallback(undefined, {
+                message: `usuario hallado con exito`,
+                detail: result[0]
+            });
+        }
+    });
+
 }
 
 module.exports = usuario_db;
