@@ -10,7 +10,7 @@ app.post('/login', login);
 
 
 function login(req, res) {
-    const { nickname, password } = req.body; 
+    const { nickname, password } = req.body;
 
     usuarioDb.findByNickname(nickname, (err, result) => {
         if (err) {
@@ -21,7 +21,7 @@ function login(req, res) {
                 let user = {
                     nickname: result.detail.nickname,
                     mail: result.detail.email
-                    
+
                 }
 
                 jwt.sign(user, 'siliconSectret', { expiresIn: '600s' }, (err, token) => {
@@ -73,4 +73,4 @@ function verificarToken(req, res, next) {
     }
 }
 
-module.exports = {app, verificarToken};
+module.exports = { app, verificarToken };

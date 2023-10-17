@@ -1,5 +1,6 @@
 const mysql = require('mysql');
-const configuracion = require('config.json'); // Asegúrate de tener la ruta correcta
+
+const configuracion = require('config.json'); 
 
 var connection = mysql.createConnection(configuracion.database);
 
@@ -13,7 +14,6 @@ connection.connect((err) => {
 
 var DetallePedido_db = {};
 
-// Función para obtener todos los detalles de pedido
 DetallePedido_db.getAll = (funcallback) => {
     var consulta = 'SELECT * FROM DETALLE_PEDIDO';
     connection.query(consulta, (err, rows) => {
