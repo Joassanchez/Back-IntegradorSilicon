@@ -20,7 +20,8 @@ function login(req, res) {
             if (iguales) {
                 let user = {
                     nickname: result.detail.nickname,
-                    mail: result.detail.email
+                    mail: result.detail.email,
+                    nombreROL:result.detail.nombreROL
 
                 }
 

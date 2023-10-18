@@ -26,7 +26,7 @@ app.use('/proveedor', controladorProveedor);
 app.use('/Registros', controladorVenta );
 app.use('/Registros/Detalles', controladorDetalleVenta );
 app.use('/security', securityController.app);
-app.use('/detalle_pedido', DetallePedidoController);
+app.use('/Pedidos/Detalles', DetallePedidoController);
 app.use('/pedido', controladorPedido);
 
 app.listen(configuracion.server.port, (err) => {

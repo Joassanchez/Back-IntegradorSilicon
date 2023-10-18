@@ -78,7 +78,10 @@ proveedor_db.borrar = (id_proveedor, funcallback) => {
     const consulta = "DELETE FROM PROVEEDOR WHERE Id_proveedor = ?";
     connection.query(consulta, id_proveedor, (err, result) => {
         if (err) {
-            funcallback(err);
+            funCallback({
+                message: "a ocurrido algun error inesperado, revisar codigo de error",
+                detail: err
+            });
         } else {
             if (result.affectedRows === 0) {
                 funcallback({

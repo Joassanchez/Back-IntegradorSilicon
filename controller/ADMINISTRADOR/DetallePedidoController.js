@@ -8,8 +8,8 @@ const DetallePedido_db = require('model/ADMINISTRADOR/DetallePedido.js');
 
 app.get('/', getAllDetallePedidos);
 app.post('/', createDetallePedido);
-app.put('/:id_detalle_pedido', updateDetallePedido);
-app.delete('/:id_detalle_pedido', deleteDetallePedido);
+app.put('/:Id_DetallePedido', updateDetallePedido);
+app.delete('/:Id_DetallePedido', deleteDetallePedido);
 
 function getAllDetallePedidos(req, res) {
     DetallePedido_db.getAll((err, resultado) => {
@@ -34,8 +34,7 @@ function createDetallePedido(req, res) {
 
 function updateDetallePedido(req, res) {
     let datosDetallePedido = req.body;
-    let idDetallePedido = req.params.id_detalle_pedido;
-    DetallePedido_db.update(datosDetallePedido, idDetallePedido, (err, resultado) => {
+    DetallePedido_db.update(datosDetallePedido, Id_DetallePedido, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -45,14 +44,14 @@ function updateDetallePedido(req, res) {
 }
 
 function deleteDetallePedido(req, res) {
-    DetallePedido_db.borrar(req.params.id_detalle_pedido, (err, result_model) => {
+    DetallePedido_db.delete(req.params.Id_DetallePedido, (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            if (result_model.detail.affectedRows == 0) {
-                res.status(404).send(result_model.message);
+            if (result.detail.affectedRows == 0) {
+                res.status(404).send(result.message);
             } else {
-                res.send(result_model.message);
+                res.send(result.message);
             }
         }
     });
