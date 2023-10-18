@@ -1,7 +1,6 @@
+require('rootpath')();
 const mysql = require('mysql');
-
 const configuracion = require('config.json');
-
 var connection = mysql.createConnection(configuracion.database);
 
 connection.connect((err) => {
@@ -80,15 +79,15 @@ DetallePedido_db.delete = function (Id_DetallePedido, funcallback) {
     consulta = "DELETE FROM DETALLE_PEDIDO WHERE Id_DetallePedido = ?";
     connection.query(consulta, Id_DetallePedido, (err, result) => {
         if (err) {
-            funCallback({
-                message: "a ocurrido algun error inesperado, revisar codigo de error",
+            funcallback({
+                message: `"a ocurrido algun error inesperado, revisar codigo de error"`,
                 detail: err
-            });
+            }); 
         } else {
             if (result.affectedRows == 0) {
-                funcallback(undefined, { message: "No se encontró el detalle de pedido, ingrese otro ID", detail: result });
+                funcallback(undefined, { message: `"No se encontró el detalle de pedido, ingrese otro ID"`, detail: result });
             } else {
-                funcallback(undefined, { message: "Detalle de pedido eliminado", detail: result });
+                funcallback(undefined, { message: `"Detalle de pedido eliminado"`, detail: result });
             }
         }
     });

@@ -44,6 +44,7 @@ function updateDetallePedido(req, res) {
 }
 
 function deleteDetallePedido(req, res) {
+    console.log(req);
     DetallePedido_db.delete(req.params.Id_DetallePedido, (err, result) => {
         if (err) {
             res.status(500).send(err);

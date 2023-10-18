@@ -130,7 +130,7 @@ usuario_db.borrar = function (id_usuario, funCallback) {
 
 
 usuario_db.findByNickname = function (nickname, funCallback) {
-    var consulta = 'SELECT * FROM usuario WHERE nickname = ?';
+    var consulta = 'SELECT Usuario.*, ROL.NombreRol FROM Usuario INNER JOIN ROL ON Usuario.id_rol = ROL.id_rol WHERE Usuario.nickname = ?';
     connection.query(consulta, nickname, function (err, result) {
         if (err) {
             funCallback(err);
