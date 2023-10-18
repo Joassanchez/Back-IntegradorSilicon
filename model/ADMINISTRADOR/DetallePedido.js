@@ -51,23 +51,23 @@ DetallePedido_db.create = function (detallePedido, funcallback) {
 
 // Función para actualizar un detalle de pedido existente
 DetallePedido_db.update = function (Id_DetallePedido, nuevoDetallePedido, funcallback) {
-    const { CantPedido, nro_pedido, Id_producto, Id_proveedor } = nuevoDetallePedido;
-    if (!CantPedido || !nro_pedido || !Id_producto || !Id_proveedor) {
+    const { CantPedido, Id_producto, Id_proveedor } = nuevoDetallePedido;
+    if (!CantPedido || !Id_producto || !Id_proveedor) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'UPDATE DETALLE_PEDIDO SET CantPedido = ?, nro_pedido = ?, Id_producto = ?, Id_proveedor = ? WHERE Id_DetallePedido = ?';
-    const datosDetallePedido = [CantPedido, nro_pedido, Id_producto, Id_proveedor, Id_DetallePedido];
+    const query = 'UPDATE DETALLE_PEDIDO SET CantPedido = ?, Id_producto = ?, Id_proveedor = ? WHERE Id_DetallePedido = ?';
+    const datosDetallePedido = [CantPedido, Id_producto, Id_proveedor, Id_DetallePedido];
 
     connection.query(query, datosDetallePedido, function (err, result) {
         if (err) {
             funcallback({
-                mensaje: "Error al actualizar el detalle de pedido",
+                mensaje: `"Error al actualizar el detalle de pedido"`,
                 detalle: err
             });
         } else {
             funcallback(null, {
-                mensaje: "Detalle de pedido actualizado correctamente",
+                mensaje: `"Detalle de pedido actualizado correctamente"`,
                 detalle: result
             });
         }
