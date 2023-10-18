@@ -21,7 +21,8 @@ function login(req, res) {
                 let user = {
                     nickname: result.detail.nickname,
                     mail: result.detail.email,
-                    nombreROL:result.detail.nombreROL
+                    nombreROL:result.detail.nombreROL,
+                    usuarioID: result.detail.id_usuario
 
                 }
 
