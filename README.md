@@ -2,7 +2,7 @@
 Autores: Joaquin Sanchez y Santiago Nuñez.
 
 La idea general de este proyecto se encuentra conformada por la de facilitar tanto la venta como la gestion de las mismas 
-enfocadas en el ambito de una Heladeria, a la cual llamamos (ipoteticamente) , "Heladeria Los Copos".
+enfocadas en el ambito de una Heladeria, a la cual llamamos (hipoteticamente) , "Heladeria Los Copos".
 
 En el proyecto hacemos uso de roles(EMPLEADO y ADMINISTRADOR) para identificar a los usuarios, por ello se creo un Login donde se deberá ingresar
 el nombre del usuario y su contraseña. Dependiendo del id de rol que posea el usuario se direccionara a una determinada pantalla u otra. Procedo a
