@@ -7,9 +7,20 @@ app.use(express.urlencoded({ extended: true }));
 const DetallePedido_db = require('model/ADMINISTRADOR/DetallePedido.js'); 
 
 app.get('/', getAllDetallePedidos);
+app.get('/productos', getProductos);
 app.post('/', createDetallePedido);
 app.put('/:Id_DetallePedido', updateDetallePedido);
 app.delete('/:Id_DetallePedido', deleteDetallePedido);
+
+function getProductos(req, res) {
+    DetalleVenta_db.getProductos((err, resultado) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(resultado);
+        }
+    });
+}
 
 function getAllDetallePedidos(req, res) {
     DetallePedido_db.getAll((err, resultado) => {
@@ -23,6 +34,7 @@ function getAllDetallePedidos(req, res) {
 
 function createDetallePedido(req, res) {
     let detallePedido = req.body;
+    
     DetallePedido_db.create(detallePedido, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
@@ -34,6 +46,7 @@ function createDetallePedido(req, res) {
 
 function updateDetallePedido(req, res) {
     let datosDetallePedido = req.body;
+    let Id_DetallePedido = req.params.Id_DetallePedido;
     DetallePedido_db.update(datosDetallePedido, Id_DetallePedido, (err, resultado) => {
         if (err) {
             res.status(500).send(err);

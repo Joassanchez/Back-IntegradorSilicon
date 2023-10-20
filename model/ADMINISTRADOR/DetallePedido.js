@@ -24,6 +24,19 @@ DetallePedido_db.getAll = (funcallback) => {
     });
 }
 
+DetallePedido_db.getProductos = (funCallback) => {
+
+    var consulta = 'SELECT * FROM PRODUCTO';
+    
+    connection.query(consulta, (err, rows) => {
+        if (err) {
+            funCallback(err);
+        } else {
+            funCallback(undefined, rows); 
+        }
+    });
+}//LISTAR
+
 // Función para crear un nuevo detalle de pedido
 DetallePedido_db.create = function (detallePedido, funcallback) {
     const { CantPedido, nro_pedido, Id_producto, Id_proveedor } = detallePedido;
@@ -37,12 +50,12 @@ DetallePedido_db.create = function (detallePedido, funcallback) {
     connection.query(query, datosDetallePedido, function (err, result) {
         if (err) {
             funcallback({
-                mensaje: "Error al crear el detalle de pedido",
+                mensaje: `"Error al crear el detalle de pedido"`,
                 detalle: err
             });
         } else {
             funcallback(null, {
-                mensaje: "Detalle de pedido creado correctamente",
+                mensaje: `"Detalle de pedido creado correctamente"`,
                 detalle: result
             });
         }
@@ -52,8 +65,11 @@ DetallePedido_db.create = function (detallePedido, funcallback) {
 // Función para actualizar un detalle de pedido existente
 DetallePedido_db.update = function (Id_DetallePedido, nuevoDetallePedido, funcallback) {
     const { CantPedido, Id_producto, Id_proveedor } = nuevoDetallePedido;
+    console.log(CantPedido)
+    console.log(Id_producto)
+    console.log(Id_proveedor)
     if (!CantPedido || !Id_producto || !Id_proveedor) {
-        return funcallback({ error: 'Faltan campos obligatorios' });
+        return funcallback({ error: '"Faltan campos obligatorios"' });
     }
 
     const query = 'UPDATE DETALLE_PEDIDO SET CantPedido = ?, Id_producto = ?, Id_proveedor = ? WHERE Id_DetallePedido = ?';
