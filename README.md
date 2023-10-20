@@ -24,6 +24,8 @@ explicar distintos casos:
   se deberá de seleccionar el Proovedor al cual fue comendado el Pedido y confirmalo, al confirmarlo el estado de el Pedido cambiara a CONFIRMADO. Si se preciona Rechazar, el estado
   de el Pedido será RECHAZADO.
 
+- El primer login debemos realizar con el nickname "ADMIN" y el password "ADMIN". Si esta todo correcto debe ingresar a la parte usuarios y ahi debera crear un usuario con el rol EMPLEADO para poder realizar las acciones de empleado.
+
 # Recursos que se utilizaron para el Proyecto:
   Backend:
   - Node.js (JavaScript)
