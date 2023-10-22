@@ -46,7 +46,9 @@ function createDetalleVenta(req, res) {
 
 function updateDetalleVenta(req, res) {
     let datos_venta = req.body;
-    let detalle_venta = req.params.id_detalle_venta; 
+    let detalle_venta = req.params.id_detalle_venta;
+    
+    console.log(datos_venta)
 
     DetalleVenta_db.update(datos_venta, detalle_venta, (err, resultado) => { 
         if (err) {

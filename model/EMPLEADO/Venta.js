@@ -43,8 +43,10 @@ Venta_db.create = function (venta, funcallback) {
 
     const {id_metodo, id_usuario } = venta; 
     if (!id_metodo || !id_usuario) { 
-        return funcallback({ error: 'Faltan campos obligatorios' }); 
+        return funcallback({ error: '"Faltan campos obligatorios"' }); 
     }
+
+    console.log(id_metodo , id_usuario)
 
     const query = 'INSERT INTO VENTA (fecha, hora, id_metodo, id_usuario) VALUES (CURDATE(), DATE_FORMAT(NOW(), "%H:%i:%S"), ?,?);';
     const datos_persona = [ id_metodo, id_usuario]; 
@@ -53,18 +55,18 @@ Venta_db.create = function (venta, funcallback) {
         if (err) {
             if (err.code == "ER_DUP_ENTRY") {
                 funcallback({
-                    mensajito: "VENTA registrada",
+                    message: `"VENTA registrada"`,
                     detalle: err
                 });
             } else {
                 funcallback({
-                    mensajito: "Error diferente",
+                    message: `"Error diferente"`,
                     detalle: err
                 });
             }
         } else {
             funcallback(null, {
-                mensajito: "Se creó una venta",
+                message: `"Se creó una venta"`,
                 detalle: result
             });
         }

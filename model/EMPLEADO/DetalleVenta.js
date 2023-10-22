@@ -40,37 +40,42 @@ DetalleVenta_db.getAll = (funCallback) => {
     });
 }//LISTAR
 
-DetalleVenta_db.create = function (venta, funcallback) {
-
-    const {nro_venta , Id_producto, CantVenta } = venta; 
-    if (!nro_venta || !Id_producto || !CantVenta) { 
-        return funcallback({ error: 'Faltan campos obligatorios' }); 
+DetalleVenta_db.create = function (detallesVenta, funcallback) {
+    const detalles_Enviar = detallesVenta.detalles_Enviar;
+    
+    if (!detalles_Enviar || !Array.isArray(detalles_Enviar)) {
+        return funcallback({ error: 'Faltan detalles de venta' });
     }
 
-    const query = 'INSERT INTO DETALLE_VENTA (nro_venta , Id_producto, CantVenta) VALUES (?, ?, ?);';
-    const datos_DetalleVenta = [nro_venta , Id_producto, CantVenta]; 
+    // Itera sobre cada detalle de venta y realiza la inserción en la base de datos
+    detalles_Enviar.forEach(detalle => {
+        const { nro_venta, Id_producto, CantVenta } = detalle;
+        const query = 'INSERT INTO DETALLE_VENTA (nro_venta , Id_producto, CantVenta) VALUES (?, ?, ?);';
+        const datos_DetalleVenta = [nro_venta, Id_producto, CantVenta]; 
 
-    connection.query(query, datos_DetalleVenta, function (err, result) {
-        if (err) {
-            if (err.code == "ER_DUP_ENTRY") {
-                funcallback({
-                    mensajito: "DETALLE de VENTA registrada",
-                    detalle: err
-                });
-            } else {
-                funcallback({
-                    mensajito: "Error diferente",
-                    detalle: err
-                });
+        connection.query(query, datos_DetalleVenta, function (error, result) {
+            if (error) {
+                if (error.code === "ER_TRUNCATED_WRONG_VALUE") { 
+                    funcallback({
+                        message: `El id del DETALLE es incorrecto`,
+                        detail: error
+                    });
+                } else {
+                    funcallback({
+                        message: `Error desconocido`,
+                        detail: error
+                    });
+                }
             }
-        } else {
-            funcallback(null, {
-                mensajito: "Se creó un DETALLE",
-                detalle: result
-            });
-        }
+        });
     });
-};//CREATE
+
+    // Cuando todas las inserciones se completen, llama a funcallback
+    funcallback(null, {
+        mensajito: "Se crearon los detalles de venta correctamente"
+    });
+};
+
 
 DetalleVenta_db.update = function (datos_venta, detalle_venta, funcallback) {
     const { Id_producto, CantVenta } = datos_venta;
