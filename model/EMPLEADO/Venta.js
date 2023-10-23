@@ -56,18 +56,18 @@ Venta_db.create = function (venta, funcallback) {
             if (err.code == "ER_DUP_ENTRY") {
                 funcallback({
                     message: `"VENTA registrada"`,
-                    detalle: err
+                    detail: err
                 });
             } else {
                 funcallback({
                     message: `"Error diferente"`,
-                    detalle: err
+                    detail: err
                 });
             }
         } else {
             funcallback(null, {
                 message: `"Se creó una venta"`,
-                detalle: result
+                detail: result
             });
         }
     });

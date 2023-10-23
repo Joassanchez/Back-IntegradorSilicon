@@ -54,14 +54,14 @@ function updatePedido(req, res) {
 }
 
 function deletePedido(req, res) {
-    Pedido_db.borrar(req.params.nro_pedido, (err, result_model) => {
+    Pedido_db.borrar(req.params.nro_pedido, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            if (result_model.detail.affectedRows == 0) {
-                res.status(404).send(result_model.message);
+            if (resultado.detail.affectedRows == 0) {
+                res.status(404).send(resultado);
             } else {
-                res.send(result_model.message);
+                res.send(resultado);
             }
         }
     });

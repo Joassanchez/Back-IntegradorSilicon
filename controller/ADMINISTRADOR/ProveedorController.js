@@ -6,9 +6,10 @@ app.use(express.urlencoded({ extended: true }));
 const proveedorDb = require('../../model/ADMINISTRADOR/Proveedor');
 
 app.get('/', getAll);
+app.get('/:Id_proveedor',findByID);
 app.post('/', createProveedor);
-app.put('/:id_proveedor', updateProveedor);
-app.delete('/:id_proveedor', deleteProveedor);
+app.put('/:Id_proveedor', updateProveedor);
+app.delete('/:Id_proveedor', deleteProveedor);
 
 function getAll(req, res) {
     proveedorDb.getAll((err, resultado) => {
@@ -33,8 +34,8 @@ function createProveedor(req, res) {
 
 function updateProveedor(req, res) {
     const datos_proveedor = req.body;
-    const id_proveedor = req.params.id_proveedor;
-    proveedorDb.update(datos_proveedor, id_proveedor, (err, resultado) => {
+    const Id_proveedor = req.params.Id_proveedor;
+    proveedorDb.update(datos_proveedor, Id_proveedor, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -44,16 +45,25 @@ function updateProveedor(req, res) {
 }
 
 function deleteProveedor(req, res) {
-    const id_proveedor = req.params.id_proveedor;
-    proveedorDb.borrar(id_proveedor, (err, result_model) => {
+    const Id_proveedor = req.params.Id_proveedor;
+    proveedorDb.borrar(Id_proveedor, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            if (result_model.detalle.affectedRows === 0) {
-                res.status(404).send(result_model.mensaje);
+            if (resultado.detail.affectedRows === 0) {
+                res.status(404).send(resultado);
             } else {
-                res.send(result_model.mensaje);
+                res.send(resultado);
             }
+        }
+    });
+}
+function findByID(req, res) {
+    proveedorDb.findByID(req.params.Id_proveedor, (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.send(result);
         }
     });
 }

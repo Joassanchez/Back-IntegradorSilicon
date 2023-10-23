@@ -53,27 +53,31 @@ DetalleVenta_db.create = function (detallesVenta, funcallback) {
         const query = 'INSERT INTO DETALLE_VENTA (nro_venta , Id_producto, CantVenta) VALUES (?, ?, ?);';
         const datos_DetalleVenta = [nro_venta, Id_producto, CantVenta]; 
 
-        connection.query(query, datos_DetalleVenta, function (error, result) {
-            if (error) {
-                if (error.code === "ER_TRUNCATED_WRONG_VALUE") { 
+        connection.query(query, datos_DetalleVenta, function (err, result) {
+            if (err) {
+                if (err.code === "ER_TRUNCATED_WRONG_VALUE") { 
                     funcallback({
-                        message: `El id del DETALLE es incorrecto`,
-                        detail: error
+                        message: `"El id del DETALLE es incorrecto"`,
+                        detail: err
                     });
                 } else {
                     funcallback({
-                        message: `Error desconocido`,
-                        detail: error
+                        message: `"Error desconocido"`,
+                        detail: err
                     });
                 }
+            }else {
+                funcallback(undefined, {
+                    message: `"Se crearon los detalles de venta correctamente"`,
+                    detail: result
+                });
+
             }
         });
+       
     });
 
     // Cuando todas las inserciones se completen, llama a funcallback
-    funcallback(null, {
-        mensajito: "Se crearon los detalles de venta correctamente"
-    });
 };
 
 

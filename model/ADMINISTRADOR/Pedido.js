@@ -57,14 +57,14 @@ Pedido_db.create = function (pedido, funcallback) {
 }
 
 Pedido_db.update = function (datos_pedido, nro_pedido, funcallback) {
-    const { estado, fecha, id_usuario, Id_producto } = datos_pedido;
+    const {estado} = datos_pedido;
 
-    if (!estado || !fecha || !id_usuario || !Id_producto) {
+    if (!estado) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'UPDATE PEDIDO SET estado=?, fecha=?, id_usuario=?, Id_producto=? WHERE nro_pedido=?';
-    const consulta = [estado, fecha, id_usuario, Id_producto, nro_pedido];
+    const query = 'UPDATE PEDIDO SET estado=? WHERE nro_pedido=?';
+    const consulta = [estado, nro_pedido];
 
     connection.query(query, consulta, (err, result) => {
         if (err) {
