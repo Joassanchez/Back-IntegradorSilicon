@@ -2,6 +2,8 @@ require('rootpath')();
 const mysql = require('mysql');
 const configuracion = require('config.json'); 
 
+
+
 var connection = mysql.createConnection(configuracion.database);
 
 connection.connect((err) => {
@@ -43,9 +45,14 @@ DetalleVenta_db.getAll = (funCallback) => {
 DetalleVenta_db.create = function (detallesVenta, funcallback) {
     const detalles_Enviar = detallesVenta.detalles_Enviar;
     
-    if (!detalles_Enviar || !Array.isArray(detalles_Enviar)) {
+    if (!detalles_Enviar || !Array.isArray(detalles_Enviar) || detalles_Enviar.length === 0) {
         return funcallback({ error: 'Faltan detalles de venta' });
     }
+
+    let completedOperations = 0; //Utilizamos un contador de las operaciones que hay que cargar 
+    const totalOperations = detalles_Enviar.length; 
+    //Una vez que este contador llega al valor de la cantidad de operaciones, ahi se realiza la funcallback
+    const errors = [];
 
     // Itera sobre cada detalle de venta y realiza la inserción en la base de datos
     detalles_Enviar.forEach(detalle => {
@@ -55,30 +62,23 @@ DetalleVenta_db.create = function (detallesVenta, funcallback) {
 
         connection.query(query, datos_DetalleVenta, function (err, result) {
             if (err) {
-                if (err.code === "ER_TRUNCATED_WRONG_VALUE") { 
-                    funcallback({
-                        message: `"El id del DETALLE es incorrecto"`,
-                        detail: err
-                    });
-                } else {
-                    funcallback({
-                        message: `"Error desconocido"`,
-                        detail: err
-                    });
-                }
-            }else {
-                funcallback(undefined, {
-                    message: `"Se crearon los detalles de venta correctamente"`,
-                    detail: result
-                });
+                errors.push(err);
+            }
 
+            completedOperations++;
+
+            // Si todas las operaciones se han completado, llama a funcallback
+            if (completedOperations === totalOperations) {
+                if (errors.length > 0) {
+                    funcallback({ error: 'Error en las operaciones de la base de datos', details: errors });
+                } else {
+                    funcallback(null, { message: 'Operaciones completadas exitosamente' });
+                }
             }
         });
-       
     });
-
-    // Cuando todas las inserciones se completen, llama a funcallback
 };
+
 
 
 DetalleVenta_db.update = function (datos_venta, detalle_venta, funcallback) {

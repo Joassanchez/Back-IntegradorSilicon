@@ -29,7 +29,7 @@ Venta_db.getMetodo_Pago = (funCallback) => {
 
 Venta_db.getAll = (funCallback) => {
 
-    var consulta = 'SELECT V.nro_venta, V.fecha, V.hora, M.NombrePago,SUM(DV.CantVenta * P.precio_venta) AS Monto_Total, U.nickname AS "Persona" FROM VENTA V INNER JOIN Metodo_Pago M ON V.id_metodo = M.id_metodo INNER JOIN usuario U ON V.id_usuario = U.id_usuario INNER JOIN detalle_venta DV ON V.nro_venta = DV.nro_venta INNER JOIN producto P ON DV.Id_producto = P.Id_producto GROUP BY V.nro_venta, V.fecha, V.hora, M.NombrePago, U.nickname ORDER BY V.nro_venta ASC;';
+    var consulta = 'SELECT V.nro_venta, V.fecha, V.hora, M.NombrePago,SUM(DV.CantVenta * P.precio_venta) AS Monto_Total, U.nickname AS "Persona" FROM VENTA V INNER JOIN Metodo_Pago M ON V.id_metodo = M.id_metodo INNER JOIN usuario U ON V.id_usuario = U.id_usuario INNER JOIN detalle_venta DV ON V.nro_venta = DV.nro_venta INNER JOIN producto P ON DV.Id_producto = P.Id_producto GROUP BY V.nro_venta, V.fecha, V.hora, M.NombrePago, U.nickname ORDER BY V.nro_venta DESC;';
     connection.query(consulta, (err, rows) => {
         if (err) {
             funCallback(err);
