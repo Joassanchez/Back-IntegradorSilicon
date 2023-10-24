@@ -50,13 +50,13 @@ DetallePedido_db.create = function (detallePedido, funcallback) {
     connection.query(query, datosDetallePedido, function (err, result) {
         if (err) {
             funcallback({
-                mensaje: `"Error al crear el detalle de pedido"`,
-                detalle: err
+                message: "Error al crear el detalle de pedido",
+                detail: err
             });
         } else {
             funcallback(null, {
-                mensaje: `"Detalle de pedido creado correctamente"`,
-                detalle: result
+                message: "Detalle de pedido creado correctamente",
+                detail: result
             });
         }
     });
@@ -77,13 +77,13 @@ DetallePedido_db.update = function (Id_DetallePedido, nuevoDetallePedido, funcal
     connection.query(query, datosDetallePedido, function (err, result) {
         if (err) {
             funcallback({
-                mensaje: `"Error al actualizar el detalle de pedido"`,
-                detalle: err
+                message: "Error al actualizar el detalle de pedido",
+                detail: err
             });
         } else {
             funcallback(null, {
-                mensaje: `"Detalle de pedido actualizado correctamente"`,
-                detalle: result
+                message: "Detalle de pedido actualizado correctamente",
+                detail: result
             });
         }
     });
@@ -95,7 +95,7 @@ DetallePedido_db.delete = function (Id_DetallePedido, funcallback) {
     connection.query(consulta, Id_DetallePedido, (err, result) => {
         if (err) {
             funcallback({
-                message: `"a ocurrido algun error inesperado, revisar codigo de error"`,
+                message: "a ocurrido algun error inesperado, revisar codigo de error",
                 detail: err
             }); 
         } else {
