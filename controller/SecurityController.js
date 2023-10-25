@@ -4,12 +4,11 @@ const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 var usuarioDb = require('../model/ADMINISTRADOR/Usuario.js');
 
-// Ruta para el proceso de inicio de sesión
 app.post('/login', login);
 
-// Función para manejar el inicio de sesión
 function login(req, res) {
     const { nickname, password } = req.body;
 

@@ -26,13 +26,13 @@ Pedido_db.getAll = (funCallback) => {
 
 
 Pedido_db.create = function (pedido, funcallback) {
-    const { estado, fecha, id_usuario, Id_producto } = pedido;
-    if (!estado || !fecha || !id_usuario || !Id_producto) {
+    const { id_usuario, Id_producto } = pedido;
+    if ( !id_usuario || !Id_producto) {
         return funcallback({ error: 'Faltan campos obligatorios' });
     }
 
-    const query = 'INSERT INTO PEDIDO (estado, fecha, id_usuario, Id_producto) VALUES (?, ?, ?, ?)';
-    const datos_pedido = [estado, fecha, id_usuario, Id_producto];
+    const query = 'INSERT INTO PEDIDO (estado, fecha, id_usuario, Id_producto) VALUES (1, CURDATE(), ?, ?)';
+    const datos_pedido = [ id_usuario, Id_producto];
 
     connection.query(query, datos_pedido, function (err, result) {
         if (err) {

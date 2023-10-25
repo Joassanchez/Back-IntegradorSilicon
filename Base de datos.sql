@@ -23,7 +23,7 @@ CREATE TABLE Usuario -- Tabla Dinamica--
 CREATE TABLE PROVEEDOR -- Tabla Dinamica--
 (
   Id_proveedor INT auto_increment NOT NULL,
-  telefono INT NOT NULL,
+  telefono VARCHAR(50) NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   especialidad VARCHAR(50) NOT NULL,
   PRIMARY KEY (Id_proveedor)
@@ -35,7 +35,7 @@ CREATE TABLE PRODUCTO -- Tabla Estatica--
   NombreProducto VARCHAR(50) NOT NULL,
   precio_venta FLOAT NOT NULL,
   unidad_medida VARCHAR(50) NOT NULL,
-  PRIMARY KEY (Id_producto)
+  CONSTRAINT PRIMARY KEY (Id_producto , precio_venta)
 );
 
 CREATE TABLE Metodo_Pago -- Tabla Estatica--
@@ -90,7 +90,7 @@ CREATE TABLE DETALLE_VENTA -- Tabla Dinamica--
   Id_producto INT NOT NULL,
   nro_venta INT NOT NULL,
   PrecioUnitario float ,
-  Monto_Parcial float GENERATED ALWAYS as (CantVenta * PrecioUnitario),
+  Monto_Parcial float GENERATED ALWAYS as(CantVenta * PrecioUnitario),
   PRIMARY KEY (id_detalle_venta),
   FOREIGN KEY (Id_producto , PrecioUnitario) REFERENCES PRODUCTO(Id_producto , precio_venta),
   FOREIGN KEY (nro_venta) REFERENCES VENTA(nro_venta)
@@ -99,7 +99,7 @@ CREATE TABLE DETALLE_VENTA -- Tabla Dinamica--
 INSERT INTO ROL (id_rol , NombreRol) 
 VALUES ( 1 , "ADMINISTRADOR"),( 2 ,"EMPLEADO");
 
--- Contraseña: ADMIN
+--Contraseña: ADMIN
 INSERT INTO Usuario (password, nickname, email, id_rol ) 
 VALUES ("$2a$10$9I5l/TqOGD5m3M8HJME2iORxJUJ6.lnMSubIufH9PK9vyCbReXHZW", "ADMIN", "ADMIN@MAIL","1");
 
